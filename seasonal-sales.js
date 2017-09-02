@@ -30,6 +30,9 @@ function getCategories(productsParam){
     }
 }
 
+var productArrayVariable = [];
+
+// Function that combines the arrays in the two JSON files
 function combinedArray(productsArray, categoriesArray){
     productsArray.forEach(function(product){
         var currentCategoryId = product["category_id"];
@@ -39,23 +42,30 @@ function combinedArray(productsArray, categoriesArray){
                 product["categoryName"] = category.name;
                 product["seasonDiscount"] = category["season_discount"];
                 product["discount"] = category.discount;
-                console.log(product);
+                product["salePrice"] = product.price - product.price * product.discount;
+                // console.log(product);
             }
         });
     });
+    productArrayVariable = productsArray;
     domString(productsArray);
 }
 
 function domString(products){
     var productString = "";
-    console.log(products);
+    // console.log(products);
     for(var i = 0; i < products.length; i++){
-        productString += `<div class="col-sm-4">`;
-        productString +=   `<div class="card" style="width: 20rem;">`;
-        productString +=     `<div class="card-body">`;
+        productString += `<div class="col-md-4 col-sm-6">`;
+        productString +=   `<div class="thumbnail">`;
+        productString +=     `<div class="caption">`;
         productString +=       `<h2>${products[i].name}</h2>`;
         productString +=       `<h3>${products[i].categoryName}</h3>`;
-        productString +=       `<p>${products[i].price}</p>`;
+        // productString +=       `<p>${products[i].price}</p>`;
+        if(selectedSeason === products[i].seasonDiscount){
+            productString += `<p>${products[i].salePrice}</p>`;
+        } else {
+            productString += `<p>${products[i].price}</p>`;
+        }
         productString +=     `</div>`;
         productString +=   `</div>`;
         productString += `</div>`;
@@ -70,50 +80,26 @@ function writeToDom(strang){
 
 
 
+var seasonSelector = document.getElementById("seasonSelector");
+var selectedSeason = "";
+
+seasonSelector.addEventListener('change', function(e){
+    console.log(e);
+    
+    var selectOptions = e.target.childNodes;
+    for(var i = 0; i < selectOptions.length; i++){
+        if(selectOptions[i].selected) {
+            // console.log(selectOptions[i].innerHTML);
+            selectedSeason = selectOptions[i].innerHTML;
+        }
+    }
+    domString(productArrayVariable);
+});
 
 
 
 
 
-// function domProducts() {
-//     let productString = ''; 
-//     jsonProductArray.forEach(function(index){
-//             productString += `<div id='productCards'>`;
-//             productString +=     `<h2>${index.name}</h2>`; 
-//             if (index.category_id === 1) {
-//             productString +=     `<h3>${jsonDepartmentsArray[0].name}</h3>`;
-//             } else if (index.category_id === 2) {
-//                 productString +=     `<h3>${jsonDepartmentsArray[1].name}</h3>`;    
-//             } else if (index.category_id === 3) {
-//                 productString +=     `<h3>${jsonDepartmentsArray[2].name}</h3>`;    
-//             }
-//             productString +=     `<h4>${index.price}</h4>`;
-//             productString += `</div>`;      
-//     });             
-//     writeToDom(productString);
-// };
 
-
-
-
-
-// // function to print to dom
-// function writeToDom(productString){
-// 	mainContainerDiv.innerHTML += productString;
-// }
-
-// // function to ...
-// function productsJSONLoad(){
-// 	var data = JSON.parse(this.responseText);
-// 	jsonProductArray = data.products;
-// 	counter();
-// }
-
-// // function to ...
-// function departmentsJSONLoad(){
-// 	var data = JSON.parse(this.responseText);
-// 	jsonDepartmentsArray = data.categories;
-// 	counter();
-// }
 
 
