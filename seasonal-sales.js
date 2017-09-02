@@ -62,7 +62,7 @@ function domString(products){
         productString +=       `<h3>${products[i].categoryName}</h3>`;
         // productString +=       `<p>${products[i].price}</p>`;
         if(selectedSeason === products[i].seasonDiscount){
-            productString += `<p>${products[i].salePrice}</p>`;
+            productString += `<p>${products[i].salePrice.toFixed(2)}</p>`;
         } else {
             productString += `<p>${products[i].price}</p>`;
         }
